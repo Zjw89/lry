@@ -1,724 +1,525 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>刘如意 - 家教实习个人主页</title>
-    <style>
-        :root {
-            --primary: #3b82f6;
-            --primary-glow: #60a5fa;
-            --bg-dark: #0f172a;
-            --bg-card: rgba(30, 41, 59, 0.7);
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: rgba(59, 130, 246, 0.3);
-        }
-        [data-theme="light"] {
-            --bg-dark: #f8fafc;
-            --bg-card: rgba(255,255,255,0.85);
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --border-color: rgba(59,130,246,0.4);
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: "Microsoft YaHei",Segoe UI,Roboto,sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            overflow-x: hidden;
-            min-height: 100vh;
-            transition: background 0.4s, color 0.4s;
-        }
-        /* 加载动画 */
-        .loader-wrap {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            z-index:9999;
-            transition: opacity 0.7s, visibility 0.7s;
-        }
-        .loader-wrap.hidden{
-            opacity:0;
-            visibility:hidden;
-        }
-        .loader{
-            width:70px;
-            height:70px;
-            border:3px solid rgba(59,130,246,0.2);
-            border-top:3px solid var(--primary);
-            border-radius:50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to{transform:rotate(360deg);}
-        }
-        /*滚动进度条*/
-        .progress-bar{
-            position:fixed;
-            top:0;
-            left:0;
-            height:4px;
-            background:linear-gradient(90deg,var(--primary),var(--primary-glow));
-            width:0;
-            z-index:9998;
-        }
-        /*粒子背景画布*/
-        #particles{
-            position:fixed;
-            inset:0;
-            z-index:-1;
-        }
-        /*导航栏*/
-        nav{
-            position:sticky;
-            top:0;
-            z-index:100;
-            backdrop-filter:blur(12px);
-            background: rgba(15,23,42,0.7);
-            border-bottom:1px solid var(--border-color);
-            transition: background 0.4s;
-        }
-        [data-theme="light"] nav{
-            background:rgba(255,255,255,0.7);
-        }
-        .nav-container{
-            max-width:1200px;
-            margin:0 auto;
-            padding:1rem 1.2rem;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-        .logo{
-            font-size:1.4rem;
-            font-weight:bold;
-            color:var(--primary-glow);
-        }
-        .nav-links{
-            display:flex;
-            gap:1.8rem;
-            align-items:center;
-        }
-        .nav-links a{
-            color:var(--text-main);
-            text-decoration:none;
-            position:relative;
-            transition:0.3s;
-        }
-        .nav-links a::after{
-            content:"";
-            position:absolute;
-            bottom:-4px;
-            left:0;
-            width:0;
-            height:2px;
-            background:var(--primary);
-            transition:0.3s;
-        }
-        .nav-links a:hover::after{
-            width:100%;
-        }
-        .nav-links a:hover{
-            color:var(--primary-glow);
-        }
-        .theme-btn{
-            border:1px solid var(--border-color);
-            background:transparent;
-            color:var(--text-main);
-            padding:0.4rem 0.7rem;
-            border-radius:999px;
-            cursor:pointer;
-            transition:0.3s;
-        }
-        .theme-btn:hover{
-            background:var(--primary);
-            color:#fff;
-        }
-        .hamburger{
-            display:none;
-            background:none;
-            border:none;
-            color:var(--text-main);
-            font-size:1.5rem;
-            cursor:pointer;
-        }
-        .mobile-menu{
-            display:none;
-            flex-direction:column;
-            gap:1rem;
-            padding:1rem 1.2rem;
-            border-top:1px solid var(--border-color);
-        }
-        .mobile-menu.show{
-            display:flex;
-        }
-        /*hero头部，头像使用 zjz.png */
-        .hero{
-            min-height:88vh;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            padding:2rem 1.2rem;
-        }
-        .hero-box{
-            text-align:center;
-            max-width:800px;
-        }
-        .avatar{
-            width:180px;
-            height:180px;
-            object-fit:cover;
-            border-radius:50%;
-            border:3px solid var(--primary-glow);
-            box-shadow:0 0 20px rgba(59,130,246,0.4);
-            margin-bottom:1rem;
-        }
-        .hero h1{
-            font-size:clamp(2rem,5vw,3.4rem);
-            margin-bottom:0.8rem;
-        }
-        .hero .job{
-            color:var(--primary-glow);
-            font-size:1.4rem;
-            margin-bottom:1.2rem;
-        }
-        .hero p{
-            color:var(--text-muted);
-            line-height:1.7;
-            font-size:1.05rem;
-            margin-bottom:2rem;
-        }
-        .hero-buttons{
-            display:flex;
-            gap:1rem;
-            justify-content:center;
-            flex-wrap:wrap;
-        }
-        .btn{
-            padding:0.8rem 1.6rem;
-            border-radius:999px;
-            text-decoration:none;
-            font-weight:600;
-            transition:0.3s;
-            border:none;
-            cursor:pointer;
-        }
-        .btn-blue{
-            background:linear-gradient(135deg,var(--primary),var(--primary-glow));
-            color:#fff;
-            box-shadow:0 0 18px rgba(59,130,246,0.4);
-        }
-        .btn-blue:hover{
-            transform:translateY(-3px);
-            box-shadow:0 0 30px rgba(59,130,246,0.6);
-        }
-        .btn-outline{
-            border:1px solid var(--primary);
-            color:var(--primary-glow);
-            background:transparent;
-        }
-        .btn-outline:hover{
-            background:rgba(59,130,246,0.12);
-            transform:translateY(-3px);
-        }
-        /*通用区块*/
-        section{
-            padding:4.5rem 1.2rem;
-        }
-        .container{
-            max-width:1200px;
-            margin:0 auto;
-        }
-        .section-title{
-            text-align:center;
-            margin-bottom:2.8rem;
-        }
-        .section-title h2{
-            font-size:clamp(1.6rem,3vw,2.3rem);
-            color:var(--primary-glow);
-            margin-bottom:0.5rem;
-        }
-        .section-title p{
-            color:var(--text-muted);
-        }
-        .reveal{
-            opacity:0;
-            transform:translateY(35px);
-            transition:0.7s ease;
-        }
-        .reveal.active{
-            opacity:1;
-            transform:translateY(0);
-        }
-        .card{
-            background:var(--bg-card);
-            border:1px solid var(--border-color);
-            border-radius:18px;
-            padding:1.8rem;
-            backdrop-filter:blur(8px);
-        }
-        /*作品集图片展示区，沿用原有文件*/
-        .gallery-grid{
-            display:grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap:1rem;
-        }
-        .gallery-item{
-            border-radius:12px;
-            overflow:hidden;
-            border:1px solid var(--border-color);
-        }
-        .gallery-item img{
-            width:100%;
-            height:180px;
-            object-fit:cover;
-            display:block;
-            transition:0.3s;
-        }
-        .gallery-item img:hover{
-            transform:scale(1.05);
-        }
-        /*关于我*/
-        .about-grid{
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:2rem;
-        }
-        .about-text h3{
-            margin-bottom:1rem;
-            color:var(--primary-glow);
-        }
-        .about-text p{
-            color:var(--text-muted);
-            line-height:1.7;
-        }
-        /*技能进度条*/
-        .skill-item{
-            margin-bottom:1.1rem;
-        }
-        .skill-head{
-            display:flex;
-            justify-content:space-between;
-            margin-bottom:0.4rem;
-        }
-        .skill-bar-wrap{
-            height:9px;
-            background:rgba(255,255,255,0.1);
-            border-radius:999px;
-            overflow:hidden;
-        }
-        .skill-fill{
-            height:100%;
-            width:0;
-            background:linear-gradient(90deg,var(--primary),var(--primary-glow));
-            transition:width 1.2s ease;
-        }
-        /*时间线 经历模块*/
-        .timeline{
-            position:relative;
-            padding-left:28px;
-        }
-        .timeline::before{
-            content:"";
-            position:absolute;
-            left:0;
-            top:0;
-            bottom:0;
-            width:2px;
-            background:var(--border-color);
-        }
-        .timeline-item{
-            position:relative;
-            margin-bottom:2.2rem;
-        }
-        .timeline-item::before{
-            content:"";
-            position:absolute;
-            left:-34px;
-            top:6px;
-            width:12px;
-            height:12px;
-            border-radius:50%;
-            background:var(--primary);
-        }
-        .timeline-date{
-            color:var(--primary-glow);
-            font-weight:600;
-            margin-bottom:0.4rem;
-        }
-        .timeline h4{
-            font-size:1.1rem;
-            margin-bottom:0.4rem;
-        }
-        .timeline ul{
-            padding-left:1.2rem;
-            color:var(--text-muted);
-            line-height:1.65;
-        }
-        /*联系卡片*/
-        .contact-item{
-            display:flex;
-            gap:0.8rem;
-            margin-bottom:1rem;
-            align-items:center;
-        }
-        .contact-item span{
-            color:var(--text-muted);
-        }
-        footer{
-            text-align:center;
-            padding:2rem;
-            color:var(--text-muted);
-            border-top:1px solid var(--border-color);
-        }
-        /*移动端适配*/
-        @media(max-width:768px){
-            .nav-links{
-                display:none;
-            }
-            .hamburger{
-                display:block;
-            }
-            .about-grid{
-                grid-template-columns:1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>刘如意 | 3D建模师 · 实习个人作品集</title>
+<style>
+:root{
+  --main:#2563eb;
+  --main-light:#60a5fa;
+  --bg-dark:#0b1120;
+  --card-bg:rgba(17,25,42,0.65);
+  --text-primary:#e2e8f0;
+  --text-secondary:#94a3b8;
+  --border:rgba(37,99,235,0.28);
+  --shadow-glow:0 0 24px rgba(37,99,235,0.18);
+}
+[data-theme="light"]{
+  --bg-dark:#f1f5f9;
+  --card-bg:rgba(255,255,255,0.78);
+  --text-primary:#0f172a;
+  --text-secondary:#475569;
+  --border:rgba(37,99,235,0.35);
+  --shadow-glow:0 0 18px rgba(37,99,235,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Microsoft YaHei",Segoe UI,Roboto,sans-serif;
+  background:var(--bg-dark);
+  color:var(--text-primary);
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background 0.45s ease,color 0.45s ease;
+}
+.preloader{
+  position:fixed;inset:0;
+  background:var(--bg-dark);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;
+  transition:opacity 0.7s ease,visibility 0.7s;
+}
+.preloader.hidden{opacity:0;visibility:hidden;}
+.spinner{
+  width:76px;height:76px;
+  border:3px solid rgba(37,99,235,0.18);
+  border-top:3px solid var(--main-light);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.scroll-progress{
+  position:fixed;top:0;left:0;height:4px;
+  background:linear-gradient(90deg,var(--main),var(--main-light));
+  width:0%;z-index:9997;
+}
+#particles-bg{position:fixed;inset:0;z-index:-1;}
+nav{
+  position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(14px);
+  background:rgba(11,17,32,0.62);
+  border-bottom:1px solid var(--border);
+  transition:background 0.45s;
+}
+[data-theme="light"] nav{background:rgba(255,255,255,0.65);}
+.nav-wrap{
+  max-width:1280px;margin:0 auto;
+  padding:1rem 1.4rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.logo{
+  font-size:1.45rem;font-weight:800;color:var(--main-light);
+  letter-spacing:1px;
+}
+.nav-menu{display:flex;gap:2rem;align-items:center;}
+.nav-menu a{
+  color:var(--text-primary);text-decoration:none;
+  position:relative;transition:0.3s ease;
+}
+.nav-menu a::after{
+  content:"";position:absolute;bottom:-4px;left:0;
+  width:0;height:2px;background:var(--main-light);
+  transition:width 0.3s ease;
+}
+.nav-menu a:hover::after{width:100%;}
+.nav-menu a:hover{color:var(--main-light);}
+.theme-toggle{
+  border:1px solid var(--border);background:transparent;
+  color:var(--text-primary);padding:0.42rem 0.8rem;
+  border-radius:999px;cursor:pointer;transition:0.3s;
+}
+.theme-toggle:hover{background:var(--main);color:#fff;}
+.hamburger{
+  display:none;background:none;border:none;
+  color:var(--text-primary);font-size:1.6rem;cursor:pointer;
+}
+.mobile-nav{
+  display:none;flex-direction:column;gap:1rem;
+  padding:1rem 1.4rem;border-top:1px solid var(--border);
+}
+.mobile-nav.show{display:flex;}
+.hero{
+  min-height:90vh;display:flex;align-items:center;justify-content:center;
+  padding:2.5rem 1.4rem;
+}
+.hero-inner{text-align:center;max-width:860px;}
+.avatar-wrap{margin-bottom:1.2rem;}
+.avatar{
+  width:190px;height:190px;object-fit:cover;
+  border-radius:50%;border:3px solid var(--main-light);
+  box-shadow:var(--shadow-glow);
+}
+.hero h1{
+  font-size:clamp(2.1rem,5vw,3.6rem);margin-bottom:0.9rem;
+}
+.hero-job{
+  color:var(--main-light);font-size:1.45rem;margin-bottom:1.4rem;
+  font-weight:600;
+}
+.hero-desc{
+  color:var(--text-secondary);font-size:1.1rem;
+  line-height:1.75;margin-bottom:2.2rem;
+}
+.btn-group{display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap;}
+.btn{
+  padding:0.9rem 2rem;border-radius:999px;text-decoration:none;
+  font-weight:600;transition:0.35s ease;border:none;cursor:pointer;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--main),var(--main-light));
+  color:#fff;box-shadow:0 0 22px rgba(37,99,235,0.4);
+}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 0 36px rgba(37,99,235,0.55);}
+.btn-ghost{
+  border:1px solid var(--main-light);color:var(--main-light);
+  background:transparent;
+}
+.btn-ghost:hover{background:rgba(37,99,235,0.12);transform:translateY(-4px);}
+section{padding:5rem 1.4rem;}
+.container{max-width:1280px;margin:0 auto;}
+.section-head{text-align:center;margin-bottom:3rem;}
+.section-head h2{
+  font-size:clamp(1.7rem,3vw,2.4rem);
+  color:var(--main-light);margin-bottom:0.6rem;
+}
+.section-head p{color:var(--text-secondary);}
+.reveal{opacity:0;transform:translateY(42px);transition:0.75s ease;}
+.reveal.active{opacity:1;transform:translateY(0);}
+.card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:20px;padding:2rem;backdrop-filter:blur(10px);
+  box-shadow:var(--shadow-glow);
+}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:1.6rem;
+}
+.gallery-item{
+  border-radius:14px;overflow:hidden;
+  border:1px solid var(--border);background:#121a2c;
+  transition:0.35s ease;
+}
+.gallery-item:hover{transform:translateY(-6px);box-shadow:var(--shadow-glow);}
+.gallery-img{
+  width:100%;height:230px;object-fit:cover;display:block;
+  transition:0.4s ease;
+}
+.gallery-item:hover .gallery-img{transform:scale(1.07);}
+.gallery-info{padding:1rem;}
+.gallery-info h4{margin-bottom:0.4rem;font-size:1.05rem;}
+.gallery-info p{color:var(--text-secondary);font-size:0.92rem;line-height:1.6;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.2rem;}
+.about-text h3{color:var(--main-light);margin-bottom:1rem;font-size:1.3rem;}
+.about-text p{color:var(--text-secondary);line-height:1.75;}
+.contact-row{display:flex;gap:0.9rem;align-items:center;margin-bottom:1.1rem;}
+.contact-row span{color:var(--text-secondary);}
+.skill-item{margin-bottom:1.3rem;}
+.skill-top{display:flex;justify-content:space-between;margin-bottom:0.45rem;}
+.skill-bar{height:10px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:hidden;}
+.skill-fill{
+  height:100%;width:0;
+  background:linear-gradient(90deg,var(--main),var(--main-light));
+  transition:width 1.3s ease;
+}
+.timeline{position:relative;padding-left:32px;}
+.timeline::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;
+  width:2px;background:var(--border);
+}
+.timeline-block{position:relative;margin-bottom:2.6rem;}
+.timeline-block::before{
+  content:"";position:absolute;left:-38px;top:8px;
+  width:13px;height:13px;border-radius:50%;background:var(--main-light);
+}
+.t-date{color:var(--main-light);font-weight:600;margin-bottom:0.5rem;}
+.t-title{font-size:1.15rem;margin-bottom:0.5rem;}
+.t-ul{padding-left:1.3rem;color:var(--text-secondary);line-height:1.7;}
+footer{
+  text-align:center;padding:2.4rem 1rem;color:var(--text-secondary);
+  border-top:1px solid var(--border);
+}
+@media(max-width:768px){
+  .nav-menu{display:none;}
+  .hamburger{display:block;}
+  .about-grid{grid-template-columns:1fr;}
+}
+</style>
 </head>
 <body>
-    <!--加载动画-->
-    <div class="loader-wrap" id="loader">
-        <div class="loader"></div>
+<div class="preloader" id="preload">
+  <div class="spinner"></div>
+</div>
+<div class="scroll-progress" id="scrollBar"></div>
+<canvas id="particles-bg"></canvas>
+
+<nav>
+  <div class="nav-wrap">
+    <div class="logo">刘如意 · 3D建模作品集</div>
+    <div class="nav-menu">
+      <a href="#about">关于我</a>
+      <a href="#works">作品集</a>
+      <a href="#skills">相关技能</a>
+      <a href="#education">教育经历</a>
+      <a href="#campus">在校经历</a>
+      <a href="#contact">联系我</a>
+      <button class="theme-toggle" id="themeBtn">切换主题</button>
     </div>
-    <!--滚动进度条-->
-    <div class="progress-bar" id="progressBar"></div>
-    <!--粒子画布-->
-    <canvas id="particles"></canvas>
+    <button class="hamburger" id="menuBtn">☰</button>
+  </div>
+  <div class="mobile-nav" id="mobileMenu">
+    <a href="#about">关于我</a>
+    <a href="#works">作品集</a>
+    <a href="#skills">相关技能</a>
+    <a href="#education">教育经历</a>
+    <a href="#campus">在校经历</a>
+    <a href="#contact">联系我</a>
+    <button class="theme-toggle" id="themeBtnMob">切换主题</button>
+  </div>
+</nav>
 
-    <!--导航栏-->
-    <nav>
-        <div class="nav-container">
-            <div class="logo">刘如意｜家教实习</div>
-            <div class="nav-links">
-                <a href="#about">关于我</a>
-                <a href="#gallery">作品集照片</a>
-                <a href="#skill">专业技能</a>
-                <a href="#edu">教育经历</a>
-                <a href="#exp">实习经历</a>
-                <a href="#school">在校经历</a>
-                <a href="#contact">联系我</a>
-                <button class="theme-btn" id="themeSwitch">切换主题</button>
-            </div>
-            <button class="hamburger" id="menuBtn">☰</button>
-        </div>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#about">关于我</a>
-            <a href="#gallery">作品集照片</a>
-            <a href="#skill">专业技能</a>
-            <a href="#edu">教育经历</a>
-            <a href="#exp">实习经历</a>
-            <a href="#school">在校经历</a>
-            <a href="#contact">联系我</a>
-            <button class="theme-btn" id="themeSwitchMob">切换主题</button>
-        </div>
-    </nav>
-
-    <!--头部Hero，头像：zjz.png-->
-    <div class="hero">
-        <div class="hero-box">
-            <img src="zjz.png" alt="证件照头像" class="avatar">
-            <h1>你好，我是刘如意</h1>
-            <div class="job">求职意向：家教｜实习岗位</div>
-            <p>19岁｜成都职业技术学院 虚拟现实技术应用专业在校生，持有大学英语四级证书，拥有丰富家教与志愿辅导经验，擅长定制个性化教学方案，激发学生学习兴趣。</p>
-            <div class="hero-buttons">
-                <a href="#contact" class="btn btn-blue">联系我</a>
-                <a href="#gallery" class="btn btn-outline">查看作品集照片</a>
-            </div>
-        </div>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="avatar-wrap">
+      <img src="zjz.png" alt="刘如意证件照" class="avatar" />
     </div>
+    <h1>刘如意</h1>
+    <div class="hero-job">求职意向：3D建模师｜实习</div>
+    <p class="hero-desc">
+      19岁，成都职业技术学院虚拟现实技术应用专业在读，持有大学英语四级证书。具备3D建模、VR场景开发基础；在校参与学生会、志愿者活动，拥有良好组织协调能力，希望能够从事3D建模实习岗位。
+    </p>
+    <div class="btn-group">
+      <a href="#works" class="btn btn-primary">浏览作品集</a>
+      <a href="#contact" class="btn btn-ghost">联系我</a>
+    </div>
+  </div>
+</div>
 
-    <!--作品集画廊，沿用仓库原有图片-->
-    <section id="gallery" class="reveal">
-        <div class="container">
-            <div class="section-title">
-                <h2>作品集照片</h2>
-                <p>仓库内已上传图片展示</p>
-            </div>
-            <div class="card">
-                <div class="gallery-grid">
-                    <div class="gallery-item"><img src="few.jpg" alt="作品"></div>
-                    <div class="gallery-item"><img src="grf.jpg" alt="作品"></div>
-                    <div class="gallery-item"><img src="gtre.jpg" alt="作品"></div>
-                    <div class="gallery-item"><img src="gtt.jpg" alt="作品"></div>
-                    <div class="gallery-item"><img src="hg.jpg" alt="作品"></div>
-                    <div class="gallery-item"><img src="tgr.jpg" alt="作品"></div>
-                </div>
-            </div>
+<section id="works" class="reveal">
+  <div class="container">
+    <div class="section-head">
+      <h2>3D建模作品集</h2>
+      <p>古风建筑 · 道具 · 场景建模作品</p>
+    </div>
+    <div class="card">
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img class="gallery-img" src="tgr.jpg" alt="古井场景" />
+          <div class="gallery-info">
+            <h4>古井场景</h4>
+            <p>古建小品三维场景制作，完成白模搭建、结构细化、基础PBR材质与灯光渲染，还原古风户外环境氛围。</p>
+          </div>
         </div>
-    </section>
-
-    <!--关于我-->
-    <section id="about" class="reveal">
-        <div class="container">
-            <div class="section-title">
-                <h2>自我评价</h2>
-                <p>认识一下我</p>
-            </div>
-            <div class="about-grid">
-                <div class="card about-text">
-                    <h3>个人简介</h3>
-                    <p>虚拟现实技术应用专业在读学生，通过学生会、青年志愿者协会积累组织协调能力。英语四级成绩优异，语言学习能力突出。善于使用创新教学方法激发学生学习兴趣，能够根据学生的个体差异灵活调整教学策略。</p>
-                </div>
-                <div class="card">
-                    <div class="contact-item"><strong>电话：</strong><span>18190583826</span></div>
-                    <div class="contact-item"><strong>邮箱：</strong><span>2689454832@qq.com</span></div>
-                    <div class="contact-item"><strong>年龄：</strong><span>19岁</span></div>
-                    <div class="contact-item"><strong>求职类型：</strong><span>实习（家教）</span></div>
-                </div>
-            </div>
+        <div class="gallery-item">
+          <img class="gallery-img" src="few.jpg" alt="古民居" />
+          <div class="gallery-info">
+            <h4>中式古民居</h4>
+            <p>传统民居建筑整体建模，处理屋顶、木构件、墙体结构与比例关系，完成场景渲染输出。</p>
+          </div>
         </div>
-    </section>
-
-    <!--技能板块-->
-    <section id="skill" class="reveal">
-        <div class="container">
-            <div class="section-title">
-                <h2>相关技能</h2>
-                <p>教学、学科、沟通能力</p>
-            </div>
-            <div class="card">
-                <div class="skill-item">
-                    <div class="skill-head"><span>教学方案设计 & 课后评估</span><span>90%</span></div>
-                    <div class="skill-bar-wrap"><div class="skill-fill" data-width="90"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-head"><span>英语｜四级水平</span><span>85%</span></div>
-                    <div class="skill-bar-wrap"><div class="skill-fill" data-width="85"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-head"><span>数学、物理、化学学科基础</span><span>82%</span></div>
-                    <div class="skill-bar-wrap"><div class="skill-fill" data-width="82"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-head"><span>家长沟通 & 学生心理辅导</span><span>88%</span></div>
-                    <div class="skill-bar-wrap"><div class="skill-fill" data-width="88"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-head"><span>学习计划定制</span><span>86%</span></div>
-                    <div class="skill-bar-wrap"><div class="skill-fill" data-width="86"></div></div>
-                </div>
-            </div>
+        <div class="gallery-item">
+          <img class="gallery-img" src="grf.jpg" alt="折扇道具" />
+          <div class="gallery-info">
+            <h4>折扇道具模型</h4>
+            <p>古风道具模型练习，完成模型制作、UV拆分、基础贴图与材质表现，注重结构细节和游戏资源规范。</p>
+          </div>
         </div>
-    </section>
-
-    <!--教育经历-->
-    <section id="edu" class="reveal">
-        <div class="container">
-            <div class="section-title">
-                <h2>教育经历</h2>
-            </div>
-            <div class="card timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">2024.09‑至今</div>
-                    <h4>成都职业技术学院｜虚拟现实技术应用</h4>
-                    <ul>
-                        <li>主修虚拟现实技术基础、3D建模、人机交互设计、计算机图形学，掌握专业核心知识</li>
-                        <li>参与课程实践项目，独立完成多个VR场景设计开发，具备技术实现能力</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="gallery-item">
+          <img class="gallery-img" src="gtre.jpg" alt="古亭" />
+          <div class="gallery-info">
+            <h4>中式古亭</h4>
+            <p>仿古亭子建筑建模，重点表现飞檐、木构、栏杆等古建特征，优化模型布线并完成场景渲染。</p>
+          </div>
         </div>
-    </section>
-
-    <!--实习经历-->
-    <section id="exp" class="reveal">
-        <div class="container">
-            <div class="section-title">
-                <h2>实习经历</h2>
-                <p>家教相关实践工作</p>
-            </div>
-            <div class="card timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">2024.10‑至今</div>
-                    <h4>家教老师</h4>
-                    <ul>
-                        <li>小学数学一对一辅导，定制个性化教学计划，学生成绩提升15分</li>
-                        <li>英语辅导，帮助学生掌握语法词汇</li>
-                        <li>定期向家长反馈学情，家长满意度95%</li>
-                        <li>组织小组学习活动，提升学习兴趣与协作能力</li>
-                    </ul>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">2024.10‑至今</div>
-                    <h4>成都墨池书院小学｜家教助理</h4>
-                    <ul>
-                        <li>辅导小学生课后作业，巩固课堂知识点</li>
-                        <li>设计趣味教学活动，学生满意度90%</li>
-                        <li>协助社区教育活动，参与人数超100人</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="gallery-item">
+          <img class="gallery-img" src="gtt.jpg" alt="木塔楼" />
+          <div class="gallery-info">
+            <h4>木质塔楼</h4>
+            <p>多层木结构塔楼制作，处理复杂构件搭接关系，控制模型面数，保证结构清晰与引擎导入基础规范。</p>
+          </div>
         </div>
-    </section>
-
-    <!--在校经历-->
-    <section id="school" class="reveal">
-        <div class="container">
-            <div class="section-title">
-                <h2>在校经历</h2>
-            </div>
-            <div class="card timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">2024.09‑至今</div>
-                    <h4>学生会文艺部｜策划负责人</h4>
-                    <ul>
-                        <li>策划校园文艺汇演，观众500+，活动满意度95%</li>
-                        <li>预算管控，节约活动成本15%</li>
-                        <li>线上线下宣传，参与人数同比上涨20%</li>
-                    </ul>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">2024.09‑至今</div>
-                    <h4>青年志愿者协会｜志愿者</h4>
-                    <ul>
-                        <li>社区小学生英语辅导，20名学生平均分提升10分</li>
-                        <li>志愿者培训筹备，培训满意度90%</li>
-                        <li>敬老院陪伴服务，服务50位老人，获得好评</li>
-                        <li>志愿者招募，成功新招30名志愿者</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="gallery-item">
+          <img class="gallery-img" src="hg.jpg" alt="古门楼" />
+          <div class="gallery-info">
+            <h4>古建门楼</h4>
+            <p>门楼主体模型制作，处理砖石墙体、木构门窗、雕花细节，完成材质表现与最终效果图输出。</p>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!--联系我-->
-    <section id="contact" class="reveal">
-        <div class="container">
-            <div class="section-title">
-                <h2>联系我</h2>
-                <p>欢迎家教合作咨询</p>
-            </div>
-            <div class="card">
-                <div class="contact-item"><strong>📞 电话：</strong><span>18190583826</span></div>
-                <div class="contact-item"><strong>✉️ 邮箱：</strong><span>2689454832@qq.com</span></div>
-            </div>
-        </div>
-    </section>
+<section id="about" class="reveal">
+  <div class="container">
+    <div class="section-head">
+      <h2>关于我</h2>
+      <p>自我评价</p>
+    </div>
+    <div class="about-grid">
+      <div class="card about-text">
+        <h3>个人简介</h3>
+        <p>
+          作为虚拟现实技术应用专业的在校生，我通过参与学生会和青年志愿者协会等活动，积累了丰富的组织与协调经验。大学英语四级取得优异成绩，具备良好外文资料阅读能力。
+        </p>
+        <br>
+        <p>
+          专业上系统学习3D建模、计算机图形学、VR场景开发，独立完成多个虚拟现实场景设计开发。学习适应能力强，善于接收新知识，愿意在实习岗位打磨三维建模专业能力。
+        </p>
+      </div>
+      <div class="card">
+        <div class="contact-row"><strong>姓名：</strong><span>刘如意</span></div>
+        <div class="contact-row"><strong>性别：</strong><span>女</span></div>
+        <div class="contact-row"><strong>年龄：</strong><span>19岁</span></div>
+        <div class="contact-row"><strong>学历：</strong><span>大专在读</span></div>
+        <div class="contact-row"><strong>专业：</strong><span>虚拟现实技术应用</span></div>
+        <div class="contact-row"><strong>证书：</strong><span>大学英语四级</span></div>
+        <div class="contact-row"><strong>求职意向：</strong><span>3D建模师（实习）</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <footer>
-        <p>©2026 刘如意｜家教实习个人主页</p>
-    </footer>
+<section id="skills" class="reveal">
+  <div class="container">
+    <div class="section-head">
+      <h2>相关技能</h2>
+      <p>专业能力</p>
+    </div>
+    <div class="card">
+      <div class="skill-item">
+        <div class="skill-top"><span>3D建模、场景设计、VR场景开发</span><span>83%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="83"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span>模型拓扑、UV拆分、基础材质渲染</span><span>78%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="78"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span>计算机图形学基础，三维项目实践</span><span>76%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="76"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span>大学英语四级，外文文档阅读</span><span>84%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="84"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span>活动策划、沟通协调、团队协作</span><span>86%</span></div>
+        <div class="skill-bar"><div class="skill-fill" data-width="86"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        //加载动画
-        const loader = document.getElementById("loader");
-        window.addEventListener("load",()=>{
-            setTimeout(()=>loader.classList.add("hidden"),600);
-        })
+<section id="education" class="reveal">
+  <div class="container">
+    <div class="section-head">
+      <h2>教育经历</h2>
+    </div>
+    <div class="card timeline">
+      <div class="timeline-block">
+        <div class="t-date">2024.09 — 至今</div>
+        <div class="t-title">成都职业技术学院｜虚拟现实技术应用</div>
+        <ul class="t-ul">
+          <li>主修课程包括虚拟现实技术基础、3D建模、人机交互设计、计算机图形学等，系统掌握虚拟现实技术应用的核心知识；</li>
+          <li>积极参与课程实践项目，独立完成多个虚拟现实场景设计与开发，具备较强的技术实现能力。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-        //滚动进度条
-        const progressBar = document.getElementById("progressBar");
-        window.addEventListener("scroll",()=>{
-            const scrollTop = window.scrollY;
-            const docHeight = document.body.scrollHeight - window.innerHeight;
-            const percent = (scrollTop/docHeight)*100;
-            progressBar.style.width = percent + "%";
-        })
+<section id="campus" class="reveal">
+  <div class="container">
+    <div class="section-head">
+      <h2>在校经历</h2>
+    </div>
+    <div class="card timeline">
+      <div class="timeline-block">
+        <div class="t-date">2024.09 — 至今</div>
+        <div class="t-title">学生会文艺部｜策划负责人</div>
+        <ul class="t-ul">
+          <li>策划并组织2024年校园文艺汇演，协调社团参与，吸引观众500+人，活动满意度达95%；</li>
+          <li>负责活动预算管理，合理分配资源，节省活动成本15%，保障活动顺利进行；</li>
+          <li>设计活动宣传方案，通过线上线下渠道推广，活动参与人数同比增长20%。</li>
+        </ul>
+      </div>
+      <div class="timeline-block">
+        <div class="t-date">2024.09 — 至今</div>
+        <div class="t-title">青年志愿者协会｜志愿者</div>
+        <ul class="t-ul">
+          <li>参与社区英语辅导项目，为20名小学生提供每周一次的英语辅导；</li>
+          <li>协助组织志愿者培训，负责培训材料准备和现场协调，培训满意度达90%；</li>
+          <li>参与敬老院探访活动，为50位老人提供陪伴服务，获得敬老院高度评价；</li>
+          <li>协助策划志愿者招募活动，成功招募新志愿者30名，为协会注入新鲜血液。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-        //滚动渐入动画
-        const reveals = document.querySelectorAll(".reveal");
-        function checkReveal(){
-            reveals.forEach(el=>{
-                const winHeight = window.innerHeight;
-                const top = el.getBoundingClientRect().top;
-                if(top < winHeight*0.88){
-                    el.classList.add("active");
-                    el.querySelectorAll(".skill-fill").forEach(bar=>{
-                        const w = bar.dataset.width;
-                        bar.style.width = w + "%";
-                    })
-                }
-            })
-        }
-        window.addEventListener("scroll",checkReveal);
-        window.addEventListener("load",checkReveal);
+<section id="contact" class="reveal">
+  <div class="container">
+    <div class="section-head">
+      <h2>联系我</h2>
+      <p>欢迎3D建模实习岗位沟通</p>
+    </div>
+    <div class="card">
+      <div class="contact-row"><strong>📞 联系电话：</strong><span>18190583826</span></div>
+      <div class="contact-row"><strong>✉️ 电子邮箱：</strong><span>2689454832@qq.com</span></div>
+    </div>
+  </div>
+</section>
 
-        //明暗主题切换
-        const themeSwitch = document.getElementById("themeSwitch");
-        const themeSwitchMob = document.getElementById("themeSwitchMob");
-        function toggleTheme(){
-            const body = document.body;
-            if(body.hasAttribute("data-theme")){
-                body.removeAttribute("data-theme");
-            }else{
-                body.setAttribute("data-theme","light");
-            }
-        }
-        themeSwitch.addEventListener("click",toggleTheme);
-        themeSwitchMob.addEventListener("click",toggleTheme);
+<footer>
+  <p>©2026 刘如意｜3D建模师实习个人作品集网页</p>
+</footer>
 
-        //移动端汉堡菜单
-        const menuBtn = document.getElementById("menuBtn");
-        const mobileMenu = document.getElementById("mobileMenu");
-        menuBtn.addEventListener("click",()=>{
-            mobileMenu.classList.toggle("show");
-        })
-        mobileMenu.querySelectorAll("a").forEach(a=>{
-            a.addEventListener("click",()=>mobileMenu.classList.remove("show"));
-        })
+<script>
+const preload = document.getElementById("preload");
+window.addEventListener("load",()=>{setTimeout(()=>preload.classList.add("hidden"),650);});
 
-        //粒子背景
-        const canvas = document.getElementById("particles");
-        const ctx = canvas.getContext("2d");
-        let w,h,particles=[];
-        function resize(){
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-        }
-        window.addEventListener("resize",resize);
-        resize();
-        class Particle{
-            constructor(){
-                this.x = Math.random()*w;
-                this.y = Math.random()*h;
-                this.r = Math.random()*2+0.5;
-                this.sx = (Math.random()-0.5)*0.4;
-                this.sy = (Math.random()-0.5)*0.4;
-            }
-            update(){
-                this.x += this.sx;
-                this.y += this.sy;
-                if(this.x<0||this.x>w) this.sx *= -1;
-                if(this.y<0||this.y>h) this.sy *= -1;
-            }
-            draw(){
-                ctx.beginPath();
-                ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
-                ctx.fillStyle="rgba(59,130,246,0.35)";
-                ctx.fill();
-            }
-        }
-        for(let i=0;i<60;i++) particles.push(new Particle());
-        function loop(){
-            ctx.clearRect(0,0,w,h);
-            particles.forEach(p=>{
-                p.update();
-                p.draw();
-            })
-            requestAnimationFrame(loop);
-        }
-        loop();
-    </script>
+const scrollBar = document.getElementById("scrollBar");
+window.addEventListener("scroll",()=>{
+  const sTop = window.scrollY;
+  const docH = document.body.scrollHeight - window.innerHeight;
+  const pct = (sTop / docH) * 100;
+  scrollBar.style.width = pct + "%";
+});
+
+const revealEls = document.querySelectorAll(".reveal");
+function checkReveal(){
+  revealEls.forEach(el=>{
+    const rect = el.getBoundingClientRect();
+    if(rect.top < window.innerHeight * 0.88){
+      el.classList.add("active");
+      el.querySelectorAll(".skill-fill").forEach(bar=>{
+        bar.style.width = bar.dataset.width + "%";
+      });
+    }
+  });
+}
+window.addEventListener("scroll",checkReveal);
+window.addEventListener("load",checkReveal);
+
+const themeBtn = document.getElementById("themeBtn");
+const themeBtnMob = document.getElementById("themeBtnMob");
+function toggleTheme(){
+  document.body.hasAttribute("data-theme")
+    ? document.body.removeAttribute("data-theme")
+    : document.body.setAttribute("data-theme","light");
+}
+themeBtn.addEventListener("click",toggleTheme);
+themeBtnMob.addEventListener("click",toggleTheme);
+
+const menuBtn = document.getElementById("menuBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+menuBtn.addEventListener("click",()=>mobileMenu.classList.toggle("show"));
+mobileMenu.querySelectorAll("a").forEach(a=>{
+  a.addEventListener("click",()=>mobileMenu.classList.remove("show"));
+});
+
+const canvas = document.getElementById("particles-bg");
+const ctx = canvas.getContext("2d");
+let W,H,particles=[];
+function resize(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener("resize",resize);
+resize();
+class Particle{
+  constructor(){
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.r = Math.random() * 2.2 + 0.4;
+    this.vx = (Math.random() - 0.5) * 0.42;
+    this.vy = (Math.random() - 0.5) * 0.42;
+  }
+  update(){
+    this.x += this.vx;
+    this.y += this.vy;
+    if(this.x < 0 || this.x > W) this.vx *= -1;
+    if(this.y < 0 || this.y > H) this.vy *= -1;
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle = "rgba(96,165,250,0.32)";
+    ctx.fill();
+  }
+}
+for(let i=0;i<65;i++) particles.push(new Particle());
+function render(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(p=>{
+    p.update();
+    p.draw();
+  });
+  requestAnimationFrame(render);
+}
+render();
+</script>
 </body>
 </html>
