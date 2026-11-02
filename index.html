@@ -163,7 +163,7 @@
         .mobile-menu.show{
             display:flex;
         }
-        /*hero头部*/
+        /*hero头部，加上头像*/
         .hero{
             min-height:88vh;
             display:flex;
@@ -174,6 +174,15 @@
         .hero-box{
             text-align:center;
             max-width:800px;
+        }
+        .avatar{
+            width:180px;
+            height:180px;
+            object-fit:cover;
+            border-radius:50%;
+            border:3px solid var(--primary-glow);
+            box-shadow:0 0 20px rgba(59,130,246,0.4);
+            margin-bottom:1rem;
         }
         .hero h1{
             font-size:clamp(2rem,5vw,3.4rem);
@@ -258,6 +267,27 @@
             border-radius:18px;
             padding:1.8rem;
             backdrop-filter:blur(8px);
+        }
+        /*作品集图片展示区【新增】*/
+        .gallery-grid{
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap:1rem;
+        }
+        .gallery-item{
+            border-radius:12px;
+            overflow:hidden;
+            border:1px solid var(--border-color);
+        }
+        .gallery-item img{
+            width:100%;
+            height:180px;
+            object-fit:cover;
+            display:block;
+            transition:0.3s;
+        }
+        .gallery-item img:hover{
+            transform:scale(1.05);
         }
         /*关于我*/
         .about-grid{
@@ -382,6 +412,7 @@
             <div class="logo">刘如意｜家教实习</div>
             <div class="nav-links">
                 <a href="#about">关于我</a>
+                <a href="#gallery">作品集照片</a>
                 <a href="#skill">专业技能</a>
                 <a href="#edu">教育经历</a>
                 <a href="#exp">实习经历</a>
@@ -393,6 +424,7 @@
         </div>
         <div class="mobile-menu" id="mobileMenu">
             <a href="#about">关于我</a>
+            <a href="#gallery">作品集照片</a>
             <a href="#skill">专业技能</a>
             <a href="#edu">教育经历</a>
             <a href="#exp">实习经历</a>
@@ -402,18 +434,39 @@
         </div>
     </nav>
 
-    <!--头部Hero-->
+    <!--头部Hero，头像用 re.jpg -->
     <div class="hero">
         <div class="hero-box">
+            <img src="re.jpg" alt="刘如意头像" class="avatar">
             <h1>你好，我是刘如意</h1>
             <div class="job">求职意向：家教｜实习岗位</div>
             <p>19岁｜成都职业技术学院 虚拟现实技术应用专业在校生，持有大学英语四级证书，拥有丰富家教与志愿辅导经验，擅长定制个性化教学方案，激发学生学习兴趣。</p>
             <div class="hero-buttons">
                 <a href="#contact" class="btn btn-blue">联系我</a>
-                <a href="#exp" class="btn btn-outline">查看实践经历</a>
+                <a href="#gallery" class="btn btn-outline">查看作品集照片</a>
             </div>
         </div>
     </div>
+
+    <!--【新增作品集图片画廊】-->
+    <section id="gallery" class="reveal">
+        <div class="container">
+            <div class="section-title">
+                <h2>作品集照片</h2>
+                <p>仓库内已上传图片展示</p>
+            </div>
+            <div class="card">
+                <div class="gallery-grid">
+                    <div class="gallery-item"><img src="few.jpg" alt="作品"></div>
+                    <div class="gallery-item"><img src="grf.jpg" alt="作品"></div>
+                    <div class="gallery-item"><img src="gtre.jpg" alt="作品"></div>
+                    <div class="gallery-item"><img src="gtt.jpg" alt="作品"></div>
+                    <div class="gallery-item"><img src="hg.jpg" alt="作品"></div>
+                    <div class="gallery-item"><img src="tgr.jpg" alt="作品"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!--关于我-->
     <section id="about" class="reveal">
@@ -429,7 +482,7 @@
                 </div>
                 <div class="card">
                     <div class="contact-item"><strong>电话：</strong><span>18190583826</span></div>
-                    <div class="contact-item"><strong>邮箱：</strong><span>2689454832@cqcom</span></div>
+                    <div class="contact-item"><strong>邮箱：</strong><span>2689454832@qq.com</span></div>
                     <div class="contact-item"><strong>年龄：</strong><span>19岁</span></div>
                     <div class="contact-item"><strong>求职类型：</strong><span>实习（家教）</span></div>
                 </div>
@@ -558,7 +611,7 @@
             </div>
             <div class="card">
                 <div class="contact-item"><strong>📞 电话：</strong><span>18190583826</span></div>
-                <div class="contact-item"><strong>✉️ 邮箱：</strong><span>2689454832@cqcom</span></div>
+                <div class="contact-item"><strong>✉️ 邮箱：</strong><span>2689454832@qq.com</span></div>
             </div>
         </div>
     </section>
